@@ -7,8 +7,9 @@ BOOM 		= BOOM
 GSL		= $(BOOM)/GSL
 HMM		= .
 OBJ	    	= obj
-CFLAGS	  	= $(OPTIMIZE) -w -fpermissive
+#CFLAGS	  	= $(OPTIMIZE) -w -fpermissive
 LDFLAGS		= $(OPTIMIZE)
+CFLAGS          = $(OPTIMIZE) -w -fpermissive -I$(GSLDIR)/include
 LIBS	    	= -L$(BOOM) -lBOOM -lgsl -lgslcblas -lpthread 
 #LIBS	    	= -L$(BOOM) -lBOOM -Wl,-Bstatic -lgsl -lgslcblas -lpthread -Wl,-Bdynamic
 
