@@ -52,6 +52,7 @@ HMM *HMMbuilder::randomHMM(int numStates,float transitionDensity,
     for(int i=0 ; i<numComp ; ++i) mix.setCoef(i,Random0to1());
     mix.normalizeCoefs();
   }
+
   for(int i=0 ; i<numComp ; ++i) {
     GSL::Vector means(numTracks);
     GSL::Matrix R(numTracks,numTracks), cov(numTracks,numTracks);
@@ -77,8 +78,8 @@ HMM *HMMbuilder::randomHMM(int numStates,float transitionDensity,
 
   // Set discrete emission distributions
   Array2D< Array1D<double> > &discrete=hmm.getDiscreteEmitDistr();
-  discrete.resize(numStates,numTracks);
   numTracks=schema.getNumDiscrete();
+  discrete.resize(numStates,numTracks);
   for(int q=0 ; q<numStates ; ++q) {
     for(int i=0 ; i<numTracks ; ++i) {
       Array1D<double> &discreteSlice=discrete[q][i];
