@@ -90,7 +90,7 @@ void HMM::printOn(ostream &os) const
 
 
 
-ostream &operator<<(ostream &os,HMM &model)
+ostream &operator<<(ostream &os,const HMM &model)
 {
   model.printOn(os);
   return os;
@@ -340,7 +340,7 @@ void HMM::setTransitionProb(int from,int to,double prob)
 double HMM::getEmissionProb(int state,const Emission &x,
 			    bool omitContinuous) const
 {
-  double P=omitContinuous ? 0.0 :
+  double P=omitContinuous || schema.getNumContinuous()==0 ? 0.0 :
     emissionProb[state].logDensity(x.getContinuous());
   int numDiscrete=schema.getNumDiscrete();
   for(int i=0 ; i<numDiscrete ; ++i) {

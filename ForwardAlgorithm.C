@@ -58,11 +58,10 @@ void ForwardAlgorithm::computeDPMatrix()
 	double inductiveP=dpMatrix[k][i-1];
 	if(!isFinite(inductiveP)) continue;
 	V.push_back(inductiveP+transP);
-	//cout<<"i="<<i<<" q1="<<l<<" q2="<<k<<" trans="<<transP<<" induct="<<inductiveP<<endl;
       }
       double sum=sumLogProbs(V);
       double emitP=hmm.getEmissionProb(l,sequence[i-1]);
-      //cout<<"sum="<<sum<<" emitP="<<emitP<<endl;
+      //cout<<"state "<<l<<" sum="<<sum<<" emit="<<emitP<<endl;
       double v=dpMatrix[l][i]=sum+emitP;
       if(isNaN(v)) {
 	cout<<sum<<" "<<hmm.getEmissionProb(l,sequence[i-1])<<" "<<endl;

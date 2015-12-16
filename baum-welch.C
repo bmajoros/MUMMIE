@@ -138,11 +138,8 @@ baum-welch [options] <initial.hmm> <dependency-graph.tgf> <training-dir> <#itera
 
   // Load the training set
   cout<<"loading training data"<<endl;
-  trainingSet.load(dir,hmm.getSchema());
-  if(cmd.option('N')) {
-    int N=cmd.optParm('N').asInt();
-    if(N<trainingSet.size()) trainingSet.resize(N);
-  }
+  const int maxSeqs=cmd.option('N') ? cmd.optParm('N').asInt() : -1;
+  trainingSet.load(dir,hmm.getSchema(),maxSeqs);
   Map<String,int> seqIDs;
   int numSeqs=trainingSet.size();
   for(int i=0 ;i<numSeqs ; ++i) {

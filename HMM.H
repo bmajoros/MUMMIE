@@ -91,6 +91,6 @@ protected:
   void discardInput(istream &,const String &match);
 };
 
-ostream &operator<<(ostream &,HMM &);
+ostream &operator<<(ostream &,const HMM &);
 
 #endif

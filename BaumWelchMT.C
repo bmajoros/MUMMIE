@@ -56,7 +56,7 @@ BaumWelchMT::BaumWelchMT(HMM &hmm,int numThreads,long maxIterations,
   ld.resize(Nq,m);
   mu.resize(m);
   globalMeans.resize(D);
-  globalCov.resize(D,D);
+  globalCov.resize(D>0?D:1,D>0?D:1);
 
   // Initialize alphabets
   const int numDiscrete=schema.getNumDiscrete();
@@ -90,6 +90,8 @@ BaumWelchMT::BaumWelchMT(HMM &hmm,int numThreads,long maxIterations,
 
 void BaumWelchMT::getGlobalStats_fast()
 {
+  if(D<1) return;
+
   GSL::Vector sums(D); sums.setAllTo(0);
   GSL::Matrix products(D,D); products.setAllTo(0);
   int sampleSize=0;
@@ -102,7 +104,6 @@ void BaumWelchMT::getGlobalStats_fast()
       sums.accumulate(v);
       for(int i=0 ; i<D ; ++i)
 	for(int j=i ; j<D ; ++j) {
-	  //cout<<D<<" "<<i<<" "<<j<<" "<<v.getDim()<<" "<<L<<" "<<pos<<endl;
 	  products(i,j)+=v[i]*v[j];
 	  if(!isFinite(products(i,j))) INTERNAL_ERROR;
 	}
@@ -378,7 +379,7 @@ void BaumWelchMT::mainAlgorithm()
       for(int j=0 ; j<m ; ++j) sum+=lambda[j]=Random0to1();
       for(int j=0 ; j<m ; ++j) mix.setCoef(j,lambda[j]/sum);
     }
-  
+
   // Initialize transition counts
   A.resize(Nq,Nq);
 
@@ -413,10 +414,13 @@ void BaumWelchMT::mainAlgorithm()
     cout<<"ITERATION #"<<iter<<"\t";cout.flush();
     resetCounts();
     hmmGraph.updateProbs();
+TRACE
 
     // Run the first set of threads
     runThreads1();
+TRACE
     updateCounts1();
+TRACE
 
     if(tieProfile) possiblyTieMeans();
 
@@ -429,12 +433,14 @@ void BaumWelchMT::mainAlgorithm()
 	  mu[j][d]=mu_j;
 	}
     }
+TRACE
 
     // Run the second set of threads
     if(!useGlobalCov) {
       runThreads2();
       updateCounts2();
     }
+TRACE
 
     // Perform parameter tying, if requested
     if(tieProfile) tieParms();
@@ -464,6 +470,7 @@ void BaumWelchMT::mainAlgorithm()
 	hmm.setTransitionProb(k,l,p);
       }
     }
+TRACE
     
     // Update mixture coefficients
     for(int j=0 ; j<m ; ++j) {
@@ -477,6 +484,7 @@ void BaumWelchMT::mainAlgorithm()
 	hmm.getEmissionDistr(q).setCoef(j,lambda);
       }
     }
+TRACE
     
     // Update covariance matrix
     //   if(!shouldFixMeans && !shouldFixCov) {
