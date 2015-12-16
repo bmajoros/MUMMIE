@@ -414,13 +414,10 @@ void BaumWelchMT::mainAlgorithm()
     cout<<"ITERATION #"<<iter<<"\t";cout.flush();
     resetCounts();
     hmmGraph.updateProbs();
-TRACE
 
     // Run the first set of threads
     runThreads1();
-TRACE
     updateCounts1();
-TRACE
 
     if(tieProfile) possiblyTieMeans();
 
@@ -433,14 +430,12 @@ TRACE
 	  mu[j][d]=mu_j;
 	}
     }
-TRACE
 
     // Run the second set of threads
     if(!useGlobalCov) {
       runThreads2();
       updateCounts2();
     }
-TRACE
 
     // Perform parameter tying, if requested
     if(tieProfile) tieParms();
@@ -470,7 +465,6 @@ TRACE
 	hmm.setTransitionProb(k,l,p);
       }
     }
-TRACE
     
     // Update mixture coefficients
     for(int j=0 ; j<m ; ++j) {
@@ -484,7 +478,6 @@ TRACE
 	hmm.getEmissionDistr(q).setCoef(j,lambda);
       }
     }
-TRACE
     
     // Update covariance matrix
     //   if(!shouldFixMeans && !shouldFixCov) {

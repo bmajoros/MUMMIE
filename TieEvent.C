@@ -109,6 +109,7 @@ bool canFixInStates(TieEntity e)
 TieLevel stringToTieLevel(const String &s)
 {
   if(s=="states") return TIE_STATES;
+  if(s=="state") return TIE_STATES;
   if(s=="components") return TIE_COMPONENTS;
   throw s+" : unknown level in tie profile";
 }
