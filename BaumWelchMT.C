@@ -924,7 +924,7 @@ void BaumThread1::f()
     const int k=*cur;
     const EmissionSequence &S=*trainingSet[k];
     const float seqWeight=seqWeights[k];
-    cout<<"weight "<<k<<" = "<<seqWeight<<endl;
+    //cout<<"weight "<<k<<" = "<<seqWeight<<endl;
     //S.save(cout);
     const int L=S.length();
     ForwardAlgorithm F(hmmGraph,S);
@@ -945,7 +945,9 @@ void BaumThread1::f()
 
     // Update transition counts
     double seqP=F.getLogP();
-    LL+=seqP;
+
+    LL+=seqP*seqWeight; // ###
+
     for(int k=0 ; k<Nq ; ++k) {
       const BOOM::Vector<StateDoublePair> &next=hmmGraph.statesFollowing(k);
       BOOM::Vector<StateDoublePair>::const_iterator cur=next.begin(), 
@@ -978,7 +980,8 @@ void BaumThread1::f()
 	for(int pos=firstPos ; pos<L ; ++pos) { 
 	  const Emission &Si=S[pos];
 	  double rho=F(q,pos+1)+B(q,pos+1)-den;
-	  rho+=log(int(seqWeight*10)); // ###
+	  //cout<<"rho="<<rho<<"\tweight="<<seqWeight<<endl;
+	  rho+=log(seqWeight); // ###
 	  NmerSymbol nmer=S[pos].getDiscrete(i);
 	  Array1D<double> &nc=nmerCounts[q][i];
 	  int ncSize=nc.size();
