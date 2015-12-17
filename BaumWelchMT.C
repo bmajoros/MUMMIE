@@ -924,6 +924,7 @@ void BaumThread1::f()
     const int k=*cur;
     const EmissionSequence &S=*trainingSet[k];
     const float seqWeight=seqWeights[k];
+    cout<<"weight "<<k<<" = "<<seqWeight<<endl;
     //S.save(cout);
     const int L=S.length();
     ForwardAlgorithm F(hmmGraph,S);
@@ -977,7 +978,7 @@ void BaumThread1::f()
 	for(int pos=firstPos ; pos<L ; ++pos) { 
 	  const Emission &Si=S[pos];
 	  double rho=F(q,pos+1)+B(q,pos+1)-den;
-	  rho+=log(seqWeight);
+	  rho+=log(int(seqWeight*10)); // ###
 	  NmerSymbol nmer=S[pos].getDiscrete(i);
 	  Array1D<double> &nc=nmerCounts[q][i];
 	  int ncSize=nc.size();

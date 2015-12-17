@@ -63,7 +63,7 @@ int main(int argc,char *argv[])
 
 
 Application::Application()
-  : filenameRegex("([^\/])\.fastb")
+  : filenameRegex("([^\\\\/]+)\\\\.fastb")
 {
 }
 
