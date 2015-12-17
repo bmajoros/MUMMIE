@@ -534,7 +534,8 @@ void BaumWelchMT::mainAlgorithm()
     }
     cout<<endl;
     if((iter>0 && deltaLL<=LLthreshold) || iter+1>=maxIterations) {
-      if(!wantUpdateDiscrete) updateDiscreteEmit();
+      //if(!wantUpdateDiscrete) updateDiscreteEmit(); // ### ???????
+      if(wantUpdateDiscrete) updateDiscreteEmit(); // ### ???????
       break;
     }
     prevLL=LL;
@@ -969,13 +970,13 @@ void BaumThread1::f()
       for(int i=0 ; i<numDiscrete ; ++i) {
 	const NmerChain &chain=bw.nmerChains[i];
 	BOOM::Vector<double> V;
-	const int firstPos=0;//### hmm.getOrder();
-	for(int pos=firstPos ; pos<L ; ++pos)
-	  V.push_back(F(q,pos+1)+B(q,pos+1));// ### added the +1's
-	double den=sumLogProbs(V);
+	const int firstPos=0;
+	/*for(int pos=firstPos ; pos<L ; ++pos)
+	  V.push_back(F(q,pos+1)+B(q,pos+1));*/
+	double den=B(0,0); //sumLogProbs(V);
 	for(int pos=firstPos ; pos<L ; ++pos) { 
 	  const Emission &Si=S[pos];
-	  /*const*/ double rho=F(q,pos+1)+B(q,pos+1)-den;// ### added the +1's
+	  double rho=F(q,pos+1)+B(q,pos+1)-den;
 	  rho+=log(seqWeight);
 	  NmerSymbol nmer=S[pos].getDiscrete(i);
 	  Array1D<double> &nc=nmerCounts[q][i];
