@@ -13,6 +13,7 @@
 #include "BOOM/SparseGraph.H"
 #include "BOOM/Constants.H"
 #include "BOOM/SumLogProbs.H"
+#include "BOOM/Regex.H"
 #include "HMM.H"
 #include "HMMGraph.H"
 #include "ForwardAlgorithm.H"
@@ -21,7 +22,9 @@
 using namespace std;
 
 class Application {
+  Regex fastbRegex;
 public:
+  Application() : fastbRegex(".*\\.fastb") {}
   int go(int argc,char *argv[]);
 };
 
@@ -59,7 +62,7 @@ int Application::go(int argc,char *argv[])
   CommandLine cmd(argc,argv,"p:");
   if(cmd.numArgs()!=2) 
     throw "\n\
-get-likelihood [options] <input.hmm> <training-dir>\n\
+get-likelihood [options] <input.hmm> <diretory-or-fastb-file>\n\
   where:  -p \"0 1 3 2 5 6 4\" = apply specified state mapping\n\
 \n\
 ";
@@ -101,28 +104,36 @@ get-likelihood [options] <input.hmm> <training-dir>\n\
   }
 
   // Process the training set
-  Array2D< BOOM::Vector<double> > counts(numStates,numStates);
-  BOOM::Vector<String> files;
-  File::getFileList(dir,files);
-  int numFiles=files.size();
   EmissionLoader loader(hmm.getSchema());
   double LL=0.0;
-  for(int i=0 ; i<numFiles ; ++i) {
-    String filename=files[i];
-    int L=filename.length();
-    if(L<7) continue;
-    String extension=filename.substr(L-5);
-    extension.toupper();
-    if(extension!="FASTB") continue;
-    String base=filename.substr(0,L-6);
-    //String pathFile=base+".path";
-    EmissionSequence *S=loader.load(dir+"/"+filename);
-    //BOOM::Vector<int> &path=*loader.loadPathFile(dir+"/"+pathFile);
+  if(fastbRegex.match(dir)) { // It's actually a filename, not a directory
+    EmissionSequence *S=loader.load(dir);
     ForwardAlgorithm F(hmmGraph,*S);
-    //cout<<F<<endl;
     LL+=F.getLogP();
-    delete S;
-    //delete &path;
+    //BackwardAlgorithm B(hmmGraph,*S); // ###
+    //cout<<F.getLogP()<<" vs. "<<B.getLogP()<<endl; // ###
+  }
+  else {
+    BOOM::Vector<String> files;
+    File::getFileList(dir,files);
+    int numFiles=files.size();
+    for(int i=0 ; i<numFiles ; ++i) {
+      String filename=files[i];
+      int L=filename.length();
+      if(L<7) continue;
+      String extension=filename.substr(L-5);
+      extension.toupper();
+      if(extension!="FASTB") continue;
+      String base=filename.substr(0,L-6);
+      //String pathFile=base+".path";
+      EmissionSequence *S=loader.load(dir+"/"+filename);
+      //BOOM::Vector<int> &path=*loader.loadPathFile(dir+"/"+pathFile);
+      ForwardAlgorithm F(hmmGraph,*S);
+      //cout<<F<<endl;
+      LL+=F.getLogP();
+      delete S;
+      //delete &path;
+    }
   }
   cout<<LL<<endl;
   
