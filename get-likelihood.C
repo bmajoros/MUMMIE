@@ -108,9 +108,11 @@ get-likelihood [options] <input.hmm> <diretory-or-fastb-file>\n\
   double LL=0.0;
   if(fastbRegex.match(dir)) { // It's actually a filename, not a directory
     EmissionSequence *S=loader.load(dir);
-    ForwardAlgorithm F(hmmGraph,*S);
-    LL+=F.getLogP();
-    //BackwardAlgorithm B(hmmGraph,*S); // ###
+    S->recode(hmm.getOrder()+1); // ###
+    //ForwardAlgorithm F(hmmGraph,*S);
+    BackwardAlgorithm B(hmmGraph,*S); // ###
+    //LL+=F.getLogP();
+    LL+=B.getLogP();
     //cout<<F.getLogP()<<" vs. "<<B.getLogP()<<endl; // ###
   }
   else {
@@ -127,6 +129,7 @@ get-likelihood [options] <input.hmm> <diretory-or-fastb-file>\n\
       String base=filename.substr(0,L-6);
       //String pathFile=base+".path";
       EmissionSequence *S=loader.load(dir+"/"+filename);
+      S->recode(hmm.getOrder()+1); // ###
       //BOOM::Vector<int> &path=*loader.loadPathFile(dir+"/"+pathFile);
       ForwardAlgorithm F(hmmGraph,*S);
       //cout<<F<<endl;

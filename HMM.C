@@ -350,7 +350,6 @@ double HMM::getEmissionProb(int state,const Emission &x,
     const int dsize=d.size();
     while(int(s)>=dsize) s=chain.getSuffix(s);
     P+=d[s];
-    //P+=discreteEmitProb[state][i][x.getDiscrete(i)];
   }
   return P;
 }
