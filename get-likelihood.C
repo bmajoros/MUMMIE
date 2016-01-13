@@ -109,10 +109,11 @@ get-likelihood [options] <input.hmm> <diretory-or-fastb-file>\n\
   if(fastbRegex.match(dir)) { // It's actually a filename, not a directory
     EmissionSequence *S=loader.load(dir);
     S->recode(hmm.getOrder()+1); // ###
-    //ForwardAlgorithm F(hmmGraph,*S);
-    BackwardAlgorithm B(hmmGraph,*S); // ###
-    //LL+=F.getLogP();
-    LL+=B.getLogP();
+    ForwardAlgorithm F(hmmGraph,*S);
+    LL=F.getLogP();
+    delete S;
+    //BackwardAlgorithm B(hmmGraph,*S); // ###
+    //LL=B.getLogP();
     //cout<<F.getLogP()<<" vs. "<<B.getLogP()<<endl; // ###
   }
   else {
