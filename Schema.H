@@ -30,6 +30,7 @@ public:
   void setContinuousName(int,const String &);
   void addContinuousTrack(const String &name);
   void dropContinuousTrack(const String &name);
+  void dropDiscreteTrack(const String &name);
   Alphabet &getAlphabet(int);
   int lookupDiscreteID(const String &name); // -1 if not found
   int lookupContinuousID(const String &name);// -1 if not found

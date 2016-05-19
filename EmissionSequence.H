@@ -37,6 +37,7 @@ public:
   EmissionSequence *getSubsequence(int begin,int length);
   Sequence *getDiscreteSeq(int trackID);
   void getExtrema(int trackID,float &minVal,float &maxVal);
+  void dropDiscreteTrack(int trackID);
 protected:
   Vector<Emission> S;
   Schema schema;

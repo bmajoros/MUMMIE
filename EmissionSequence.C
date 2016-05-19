@@ -217,3 +217,17 @@ void EmissionSequence::getExtrema(int trackID,float &minVal,float &maxVal)
 
 
 
+void EmissionSequence::dropDiscreteTrack(int trackID)
+{
+  const int L=S.size();
+  for(Vector<Emission>::iterator cur=S.begin(), end=S.end() ; cur!=end ;
+      ++cur) {
+    Emission &e=*cur;
+    e.dropDiscreteTrack(trackID);
+  }
+  const String &name=schema.getDiscreteName(trackID);
+  schema.dropDiscreteTrack(name);
+}
+
+
+

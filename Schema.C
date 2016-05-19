@@ -182,3 +182,16 @@ void Schema::dropContinuousTrack(const String &name)
 }
 
 
+
+void Schema::dropDiscreteTrack(const String &name)
+{
+  int id=continuousIDs[name];
+  continuousNames.cut(id);
+  alphabets.cut(id);
+  continuousIDs.clear();
+  --numDiscrete;
+  for(int i=0 ; i<numDiscrete ; ++i)
+    continuousIDs[continuousNames[i]]=i;
+}
+
+

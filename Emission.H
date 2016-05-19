@@ -31,6 +31,7 @@ public:
   void printOn(ostream &) const;
   unsigned hash() const;
   bool operator==(const Emission &) const;
+  void dropDiscreteTrack(int trackID);
 protected:
   unsigned hashCache;
   GSL::Vector continuous;

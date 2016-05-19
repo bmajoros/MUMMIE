@@ -120,5 +120,10 @@ bool Emission::operator==(const Emission &e) const
 
 
 
+void Emission::dropDiscreteTrack(int trackID)
+{
+  discrete.cut(trackID);
+}
+
 
 

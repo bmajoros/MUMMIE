@@ -51,20 +51,20 @@ int Application::main(int argc,char *argv[])
 {
   // Process command line
   CommandLine cmd(argc,argv,"d");
-  if(cmd.numArgs()!=5)
+  if(cmd.numArgs()!=6)
     throw String("\n\
-fastb-slice-by-symbol <in.schema> <in.fastb> <out-filestem> <track> <symbol>\n\
+fastb-slice-by-symbol <in.schema> <in.fastb> <out-dir> <out-filestem> <track> <symbol>\n\
    -d : drop the discrete track when writing output files\n\
 ");
   const String schemaFile=cmd.arg(0);
   const String infile=cmd.arg(1);
-  const String filestem=cmd.arg(2);
+  const String outDir=cmd.arg(2);
+  const String filestem=cmd.arg(3);
   const String trackName=cmd.arg(4);
   const String symbolStr=cmd.arg(5);
   const bool wantDrop=cmd.option('d');
   if(symbolStr.length()!=1) throw "symbol must be a single character";
-
-  if(wantDrop) throw "-d is not yet implemented.";
+  if(outDir.length()>0 && outDir.lastChar()=='/') outDir.chop();
 
   // Load the sequence and schema
   Schema schema(schemaFile);
@@ -82,7 +82,8 @@ fastb-slice-by-symbol <in.schema> <in.fastb> <out-filestem> <track> <symbol>\n\
 	end=intervals.end() ; cur!=end ; ++cur) {
     const Interval I=*cur;
     EmissionSequence *sub=S.getSubsequence(I.getBegin(),I.length());
-    String filename=filestem+nextFile;
+    if(wantDrop) sub->dropDiscreteTrack(trackID);
+    String filename=outDir+"/"+filestem+nextFile+".fastb";
     sub->save(filename);
     delete sub;
     ++nextFile;
