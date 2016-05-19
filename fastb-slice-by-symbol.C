@@ -64,6 +64,8 @@ fastb-slice-by-symbol <in.schema> <in.fastb> <out-filestem> <track> <symbol>\n\
   const bool wantDrop=cmd.option('d');
   if(symbolStr.length()!=1) throw "symbol must be a single character";
 
+  if(wantDrop) throw "-d is not yet implemented.";
+
   // Load the sequence and schema
   Schema schema(schemaFile);
   EmissionLoader loader(schema);
