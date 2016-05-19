@@ -1623,3 +1623,24 @@ $(OBJ)/IntervalDecoder.o:\
 	$(CC) $(CFLAGS) -o $(OBJ)/IntervalDecoder.o -c \
 		IntervalDecoder.C
 #---------------------------------------------------------
+
+#--------------------------------------------------------
+$(OBJ)/fastb-slice-by-symbol.o:\
+		fastb-slice-by-symbol.C
+	$(CC) $(CFLAGS) -o $(OBJ)/fastb-slice-by-symbol.o -c \
+		fastb-slice-by-symbol.C
+#---------------------------------------------------------
+fastb-slice-by-symbol: \
+		$(OBJ)/Schema.o \
+		$(OBJ)/Emission.o \
+		$(OBJ)/EmissionSequence.o \
+		$(OBJ)/EmissionLoader.o \
+		$(OBJ)/fastb-slice-by-symbol.o
+	$(CC) $(LDFLAGS) -o fastb-slice-by-symbol \
+		$(OBJ)/Schema.o \
+		$(OBJ)/Emission.o \
+		$(OBJ)/EmissionSequence.o \
+		$(OBJ)/EmissionLoader.o \
+		$(OBJ)/fastb-slice-by-symbol.o \
+		$(LIBS)
+#---------------------------------------------
