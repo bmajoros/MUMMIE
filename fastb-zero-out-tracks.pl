@@ -8,6 +8,7 @@ die "$name <in.fastb> <track,name,list> <out.fastb>
     in.fastb and out.fastb can instead be directory names
 " unless @ARGV==3;
 my ($infile,$trackList,$outfile)=@ARGV;
+my @tracks=split/,/,$trackList;
 
 if($infile=~/\.fastb$/) { zeroOut($infile,$outfile) }
 else { # directory
@@ -17,19 +18,15 @@ else { # directory
   for(my $i=0 ; $i<$n ; ++$i) {
     my $file=$files[$i]; chomp $file;
     if(/\/(\S+\.fastb$)/) { $file=$1 }
-    zeroOut("$indir/$file","$outdir/$file");
+    zeroOut("$indir/$file","$outdir/$file",\@tracks);
   }
 }
 
 sub zeroOut
 {
-  my ($infile,$outfile)=@_;
-
-  print "$infile => $outfile\n"; return;
-
-  my @tracks=split/,/,$trackList;
+  my ($infile,$outfile,$tracks)=@_;
   my $fastb=new Fastb($infile);
-  foreach my $trackName (@tracks) {
+  foreach my $trackName (@$tracks) {
     my $track=$fastb->getTrackByName($trackName);
     my $L=$track->getLength();
     my $data=$track->getData();
