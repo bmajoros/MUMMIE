@@ -10,7 +10,7 @@ my @files=`ls $dir`;
 foreach my $file (@files) {
   chomp $file;
   if($file=~/\.fastb$/) {
-    system("/home/ohler/bmajoros/GUMBIE/schema-from-fastb.pl $dir/$file");
+    system("\$MUMMIE/schema-from-fastb.pl $dir/$file");
     exit;
   }
 }
