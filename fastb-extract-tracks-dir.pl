@@ -5,7 +5,7 @@
 use strict;
 use ProgramName;
 
-my $BIN="/home/ohler/bmajoros/GUMBIE";
+my $BIN=$ENV{"MUMMIE"};
 
 my $name=ProgramName::get();
 die "$name <indir> <outdir> <track1> <track2> ...\n" unless @ARGV>=3;

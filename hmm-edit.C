@@ -331,6 +331,9 @@ void Application::var(CommandLine &cmd,int &index)
       for(BOOM::Vector<int>::iterator cur=mixtures.begin(), end=mixtures.end() ; 
 	  cur!=end ; ++cur) {
 	int mixIndex=*cur;
+	if(mixIndex<0 || 
+	   mixIndex>=hmm->getEmissionDistr(state).getNumComponents())
+	  throw "Invalid mixture index";
 	hmm->getEmissionDistr(state).getDistr(mixIndex).
 	  getCov()(trackIndex,trackIndex)=Y;
       }
