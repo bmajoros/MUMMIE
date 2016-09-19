@@ -1643,4 +1643,25 @@ fastb-slice-by-symbol: \
 		$(OBJ)/EmissionLoader.o \
 		$(OBJ)/fastb-slice-by-symbol.o \
 		$(LIBS)
+#--------------------------------------------------------
+$(OBJ)/fastb-slice.o:\
+		fastb-slice.C
+	$(CC) $(CFLAGS) -o $(OBJ)/fastb-slice.o -c \
+		fastb-slice.C
+#---------------------------------------------------------
+fastb-slice: \
+		$(OBJ)/Schema.o \
+		$(OBJ)/Emission.o \
+		$(OBJ)/EmissionSequence.o \
+		$(OBJ)/EmissionLoader.o \
+		$(OBJ)/fastb-slice.o
+	$(CC) $(LDFLAGS) -o fastb-slice-by-symbol \
+		$(OBJ)/Schema.o \
+		$(OBJ)/Emission.o \
+		$(OBJ)/EmissionSequence.o \
+		$(OBJ)/EmissionLoader.o \
+		$(OBJ)/fastb-slice.o \
+		$(LIBS)
 #---------------------------------------------
+
+
