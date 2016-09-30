@@ -4,7 +4,7 @@
 # License (GPL) version 3, as described at www.opensource.org.
 use strict;
 
-my $LINEWIDTH=3;
+my $LINEWIDTH=2;
 
 my $wantTrack;
 if(@ARGV>0) {$wantTrack=shift @ARGV}
@@ -34,7 +34,7 @@ while(<STDIN>) {
 my $names="";
 my $n=@names;
 for(my $i=0 ; $i<$n ; ++$i) {$names.="-$i $names[$i] "}
-open(OUT,"|xgraph -lw $LINEWIDTH $names");
+open(OUT,"|xgraph -bg white -zg black -lw $LINEWIDTH $names");
 print OUT $stdout;
 close(OUT);
 #print $stdout;

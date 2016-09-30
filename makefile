@@ -1655,7 +1655,7 @@ fastb-slice: \
 		$(OBJ)/EmissionSequence.o \
 		$(OBJ)/EmissionLoader.o \
 		$(OBJ)/fastb-slice.o
-	$(CC) $(LDFLAGS) -o fastb-slice-by-symbol \
+	$(CC) $(LDFLAGS) -o fastb-slice \
 		$(OBJ)/Schema.o \
 		$(OBJ)/Emission.o \
 		$(OBJ)/EmissionSequence.o \
