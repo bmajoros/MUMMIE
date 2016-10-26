@@ -41,6 +41,7 @@ double ForwardAlgorithm::operator()(int state,int pos) const
 
 void ForwardAlgorithm::computeDPMatrix()
 {
+  if(seqLen==0) throw "ERROR: empty sequence provided to ForwardAlgorithm";
   P=0;
   dpMatrix[0][0]=0.0;
   for(int i=1 ; i<=seqLen ; ++i) dpMatrix[0][i]=NEGATIVE_INFINITY;
@@ -90,9 +91,11 @@ void ForwardAlgorithm::computeDPMatrix()
   P=sumLogProbs(V);
   if(!isFinite(P))
     for(int k=1 ; k<numStates ; ++k) {
+      cout<<"seqLen="<<seqLen<<endl;
       cout<<"dpMatrix[k][seqLen]="<<dpMatrix[k][seqLen]<<endl;
       cout<<"hmm.getTransitionProb(k,0)="
 	  <<hmm.getTransitionProb(k,0)<<endl;
+      cout<<dpMatrix<<endl;
     }
 }
 

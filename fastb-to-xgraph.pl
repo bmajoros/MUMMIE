@@ -34,7 +34,8 @@ while(<STDIN>) {
 my $names="";
 my $n=@names;
 for(my $i=0 ; $i<$n ; ++$i) {$names.="-$i $names[$i] "}
-open(OUT,"|xgraph -bg white -zg black -lw $LINEWIDTH $names");
+#open(OUT,"|xgraph -bg white -zg black -lw $LINEWIDTH $names");
+open(OUT,"|xgraph -zg black -lw $LINEWIDTH $names");
 print OUT $stdout;
 close(OUT);
 #print $stdout;

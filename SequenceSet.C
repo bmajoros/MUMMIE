@@ -141,6 +141,8 @@ void SequenceSet::load(const String &dir,Schema &schema,int maxFiles)
   for(int i=0 ; i<numFiles ; ++i) {
     const String fullpath=dir+"/"+files[i];
     EmissionSequence *seq=loader.load(fullpath);
+    if(seq->length()==0) 
+      throw String("ERROR: empty sequence in training set: ")+fullpath;
     seq->setFilename(fullpath);
     seqs.push_back(seq);
   }

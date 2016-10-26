@@ -110,7 +110,7 @@ baum-welch [options] <initial.hmm> <dependency-graph.tgf> <training-dir> <#itera
   const String meansFile=cmd.option('m') ? cmd.optParm('m') : "";
   bool constantMeans=cmd.option('M');
   //if(constantMeans && !cmd.option('m')) throw "-M require -m";
-  if(numThreads<0 || numThreads>20) throw "Invalid number of threads";
+  if(numThreads<0 || numThreads>1000) throw "Invalid number of threads";
   const String transformFile=cmd.option('C') ? cmd.optParm('C') : "";
   double bilmesFactor=cmd.option('B') ? cmd.optParm('B').asFloat() : 1.0;
   bool useGlobalCov=cmd.option('g');
