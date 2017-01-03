@@ -28,6 +28,7 @@ print OUT "#\n";
 my $n=$id-1;
 for(my $i=1 ; $i<=$n ; ++$i) {
   for(my $j=1 ; $j<=$n ; ++$j) {
+    if($full==0 && $j!=$i) { next }
     print OUT "$i\t$j\n";
   }
 }
