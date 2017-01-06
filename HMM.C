@@ -594,6 +594,14 @@ void HMM::dropContinuousTracks()
 
 
 
+void HMM::dropDiscreteTracks()
+{
+  discreteEmitProb.resize(numStates,0);
+  schema.setNumDiscrete(0);
+}
+
+
+
 double HMM::getEmissionProb(int inState,const EmissionSequence &S,
 			    bool omitContinuous) const
 {
@@ -665,12 +673,18 @@ void HMM::dropContinuousTrack(const String &name)
 {
   int id=schema.lookupContinuousID(name);
   schema.dropContinuousTrack(name);
-  int numCont=schema.getNumContinuous();
-  Array2D<int> O(numStates,numCont);
-  for(int q=1 ; q<numStates ; ++q) {
-    for(int i=0 ; i<numCont ; ++i) O[q][i]=orders[q][i<id?i:i+1];
+  for(int q=1 ; q<numStates ; ++q)
     emissionProb[q].dropVariate(id);
-  }
+}
+
+
+
+void HMM::dropDiscreteTrack(const String &name)
+{
+  int id=schema.lookupDiscreteID(name);
+  schema.dropDiscreteTrack(name);
+  discreteEmitProb.deleteColumn(id);
+  orders.deleteColumn(id);
 }
 
 

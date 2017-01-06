@@ -46,6 +46,7 @@ class Application {
   void var(CommandLine &cmd,int &index);
   void trk(CommandLine &cmd,int &index);
   void dtrk(CommandLine &cmd,int &index);
+  void ddtrk(CommandLine &cmd,int &index);
   void comp(CommandLine &cmd,int &index);
   void nmer(CommandLine &cmd,int &index);
   void ord(CommandLine &cmd,int &index);
@@ -99,6 +100,7 @@ hmm-edit <in-out.hmm> <operations>\n\
     VAR mixture_index track_index value : set variance to value\n\
     TRK name : add continuous track\n\
     DTRK name : delete continuous track\n\
+    DDTRK name : delete discrete track\n\
     COMP : add another mixture component (applies to all states)\n\
     NMER state track_index nmer prob : set P(last nmer base | prefix)\n\
     ORD state order : set state order (for all discrete tracks)\n\
@@ -131,6 +133,7 @@ int Application::go(int argc,char *argv[])
     else if(op=="VAR") var(cmd,i);
     else if(op=="TRK") trk(cmd,i);
     else if(op=="DTRK") dtrk(cmd,i);
+    else if(op=="DDTRK") ddtrk(cmd,i);
     else if(op=="COMP") comp(cmd,i);
     else if(op=="NMER") nmer(cmd,i);
     else if(op=="ORD") ord(cmd,i);
@@ -357,6 +360,15 @@ void Application::dtrk(CommandLine &cmd,int &index)
   if(cmd.numArgs()<=index) throw "missing arguments";
   String arg=cmd.arg(index++);
   hmm->dropContinuousTrack(arg);
+}
+
+
+
+void Application::ddtrk(CommandLine &cmd,int &index)
+{
+  if(cmd.numArgs()<=index) throw "missing arguments";
+  String arg=cmd.arg(index++);
+  hmm->dropDiscreteTrack(arg);
 }
 
 
