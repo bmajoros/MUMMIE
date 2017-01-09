@@ -71,6 +71,7 @@ public:
   void getEquilibrium(GSL::Vector &);
   int getOrder(int state,int trackNum) {return orders[state][trackNum];}
   void addContinuousTrack(const String &name);
+  void addDiscreteTrack(const String &name,const Alphabet &,int order);
   void dropContinuousTrack(const String &name);
   void dropDiscreteTrack(const String &name);
   void addMixtureComponent();

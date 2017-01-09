@@ -101,6 +101,7 @@ baum-welch [options] <initial.hmm> <dependency-graph.tgf> <training-dir> <#itera
   String dir=cmd.arg(2);
   int maxIterations=cmd.arg(3).asInt();
   String outfile=cmd.arg(4);
+  if(!File::exists(graphFile)) throw graphFile+" does not exist";
   SparseGraph *graph=new SparseGraph(graphFile);
   int numThreads=cmd.option('c') ? cmd.optParm('c').asInt() : 1;
   ofstream *osLog=
@@ -134,6 +135,7 @@ baum-welch [options] <initial.hmm> <dependency-graph.tgf> <training-dir> <#itera
 
   // Load HMM structure
   cout<<"loading initial HMM"<<endl;
+  if(!File::exists(structureFile)) throw structureFile+" does not exist";
   HMM hmm(structureFile);
 
   // Load the training set

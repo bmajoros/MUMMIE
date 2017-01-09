@@ -171,6 +171,16 @@ void Schema::addContinuousTrack(const String &name)
 
 
 
+void Schema::addDiscreteTrack(const String &name,const Alphabet &alpha)
+{
+  discreteNames.push_back(name);
+  discreteIDs[name]=numDiscrete;
+  ++numDiscrete;
+  alphabets.push_back(alpha);
+}
+
+
+
 void Schema::dropContinuousTrack(const String &name)
 {
   int id=continuousIDs[name];

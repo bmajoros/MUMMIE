@@ -555,7 +555,7 @@ void BaumWelchMT::mainAlgorithm()
 
 void BaumWelchMT::updateDiscreteEmit()
 {
-  cout<<"updating DNA track"<<endl;
+  cout<<"updating discrete track"<<endl;
   Array2D< Array1D<double> > &distr=hmm.getDiscreteEmitDistr();
   for(int q=1 ; q<Nq ; ++q) {
     if(shouldFixChains[q]) continue;
@@ -588,7 +588,7 @@ void BaumWelchMT::updateDiscreteEmit()
 
 void BaumWelchMT::updateDiscreteEmit_joint()
 {
-  cout<<"updating DNA track (joint)"<<endl;
+  cout<<"updating discrete track (joint)"<<endl;
   Array2D< Array1D<double> > &distr=hmm.getDiscreteEmitDistr();
   for(int q=1 ; q<Nq ; ++q) {
     if(shouldFixChains[q]) continue;

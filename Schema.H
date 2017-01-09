@@ -29,6 +29,7 @@ public:
   void setDiscreteName(int,const String &);
   void setContinuousName(int,const String &);
   void addContinuousTrack(const String &name);
+  void addDiscreteTrack(const String &name,const Alphabet &);
   void dropContinuousTrack(const String &name);
   void dropDiscreteTrack(const String &name);
   Alphabet &getAlphabet(int);

@@ -643,8 +643,31 @@ void HMM::copyEmissionDistr(const HMM &other,int otherState,int thisState)
 
 void HMM::addContinuousTrack(const String &name)
 {
-  for(int i=0 ; i<numStates ; ++i) emissionProb[i].addVariate();
+  for(int i=1 ; i<numStates ; ++i) emissionProb[i].addVariate();
   schema.addContinuousTrack(name);
+}
+
+
+
+void HMM::addDiscreteTrack(const String &name,const Alphabet &alpha,int order)
+{
+  schema.addDiscreteTrack(name,alpha);
+  const int id=schema.lookupDiscreteID(name);
+  orders.addColumn();
+  for(int state=1 ; state<numStates ; ++state) orders[state][id]=order;
+  discreteEmitProb.addColumn();
+  for(int state=1 ; state<numStates ; ++state) {
+    Array1D<double> &array=discreteEmitProb[state][id];
+    HigherOrderAlphabet H(Alphabet(alpha),order+1);
+    const int numNmers=H.getNumNmers();
+    array.resize(numNmers);
+    float sum=0.0;
+    for(int i=1 ; i<numNmers ; ++i)
+      sum+=array[i]=double(RandomFloat(0.01,0.99));
+    for(int i=1 ; i<numNmers ; ++i)
+      array[i]/=sum;
+    array[0]=0.0;
+  }
 }
 
 

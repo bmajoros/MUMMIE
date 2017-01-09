@@ -19,7 +19,7 @@ using namespace BOOM;
 
 enum ParmType {
   PT_VALUES,  // array of floating-point values
-  PT_ALL,     // they keyword "all"
+  PT_ALL,     // the keyword "all"
   PT_STRING   // string representing a DNA/RNA/protein sequence
 };
 
@@ -45,6 +45,7 @@ class Application {
   void cov(CommandLine &cmd,int &index);
   void var(CommandLine &cmd,int &index);
   void trk(CommandLine &cmd,int &index);
+  void atrk(CommandLine &,int &index);
   void dtrk(CommandLine &cmd,int &index);
   void ddtrk(CommandLine &cmd,int &index);
   void comp(CommandLine &cmd,int &index);
@@ -99,6 +100,7 @@ hmm-edit <in-out.hmm> <operations>\n\
     COV mixture_index track_A track_B value : set covariance to value\n\
     VAR mixture_index track_index value : set variance to value\n\
     TRK name : add continuous track\n\
+    ATRK name alphabet order : add discrete track\n\
     DTRK name : delete continuous track\n\
     DDTRK name : delete discrete track\n\
     COMP : add another mixture component (applies to all states)\n\
@@ -132,6 +134,7 @@ int Application::go(int argc,char *argv[])
     else if(op=="COV") cov(cmd,i);
     else if(op=="VAR") var(cmd,i);
     else if(op=="TRK") trk(cmd,i);
+    else if(op=="ATRK") atrk(cmd,i);
     else if(op=="DTRK") dtrk(cmd,i);
     else if(op=="DDTRK") ddtrk(cmd,i);
     else if(op=="COMP") comp(cmd,i);
@@ -355,6 +358,18 @@ void Application::trk(CommandLine &cmd,int &index)
 
 
 
+void Application::atrk(CommandLine &cmd,int &index)
+{
+  Parm nameParm=nextParm(cmd,index), alphaParm=nextParm(cmd,index),
+    orderParm=nextParm(cmd,index);
+  const String name=nameParm.str;
+  const String alpha=alphaParm.str;
+  const int order=orderParm.str.asInt();
+  hmm->addDiscreteTrack(name,Alphabet(alpha.c_str()),order);
+}
+
+
+
 void Application::dtrk(CommandLine &cmd,int &index)
 {
   if(cmd.numArgs()<=index) throw "missing arguments";
@@ -404,7 +419,8 @@ Parm Application::nextParm(CommandLine &cmd,int &index)
     }
     delete &fields;
   }
-  else if(t==PT_STRING) parm.str=arg;
+  //else if(t==PT_STRING) parm.str=arg;
+  parm.str=arg;
   return parm;
 }
 
