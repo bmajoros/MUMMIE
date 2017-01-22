@@ -3,6 +3,10 @@
 # This is OPEN SOURCE SOFTWARE governed by the Gnu General Public
 # License (GPL) version 3, as described at www.opensource.org.
 use strict;
+use Getopt::Std;
+our $opt_t;
+getopts('t:');
+my $title=$opt_t ? " -t $opt_t " : "";
 
 my $LINEWIDTH=2;
 
@@ -35,7 +39,7 @@ my $names="";
 my $n=@names;
 for(my $i=0 ; $i<$n ; ++$i) {$names.="-$i $names[$i] "}
 #open(OUT,"|xgraph -bg white -zg black -lw $LINEWIDTH $names");
-open(OUT,"|xgraph -zg black -lw $LINEWIDTH $names");
+open(OUT,"|xgraph $title -zg black -lw $LINEWIDTH $names");
 print OUT $stdout;
 close(OUT);
 #print $stdout;

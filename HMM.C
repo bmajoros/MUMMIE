@@ -14,6 +14,7 @@
 #include "BOOM/RouletteWheel.H"
 #include "BOOM/HigherOrderAlphabet.H"
 #include "BOOM/Set.H"
+#include "HMMbuilder.H"
 using namespace std;
 
 
@@ -675,7 +676,7 @@ void HMM::addDiscreteTrack(const String &name,const Alphabet &alpha,int order)
 void HMM::addMixtureComponent()
 {
   int n=emissionProb.size();
-  for(int i=0 ; i<n ; ++i) emissionProb[i].addComponent();
+  for(int i=1 ; i<n ; ++i) emissionProb[i].addComponent();
 }
 
 
@@ -756,6 +757,48 @@ void HMM::normalizeDiscreteEmit()
   }
 }
 
+
+
+void HMM::addStates(int numNewStates)
+{
+  // Add additional rows to data structures, without losing existing values
+  for(int i=0 ; i<numNewStates ; ++i) {
+    orders.addRow();
+    transitionProb.addRow();
+    transitionProb.addColumn();
+    discreteEmitProb.addRow(); }
+  emissionProb.safeResize(numStates+numNewStates);
+
+  // Fill the new rows with appropriate values
+  const int numDiscreteTracks=schema.getNumDiscrete();
+  const int numContinuousTracks=schema.getNumContinuous();
+  const int numComponents=numMixtureComponents();
+  for(int state=numStates ; state<numStates+numNewStates ; ++state) {
+    for(int track=0 ; track<numDiscreteTracks ; ++track) {
+      orders[state][track]=order;
+      HigherOrderAlphabet H(schema.getAlphabet(track),order+1);
+      const int numNmers=H.getNumNmers();
+      discreteEmitProb[state][track].safeResize(numNmers);
+    }
+    GaussianMixture &mixture=emissionProb[state];
+    if(numStates>1) {
+      mixture=emissionProb[1];
+      for(int component=0 ; component<numComponents ; ++component)
+	mixture.setCoef(component,Random0to1());
+    }
+    else {
+      HMMbuilder builder;
+      HMM *hmm1=builder.randomHMM(2,0,numComponents,schema,order,NULL,false);
+      mixture=hmm1->emissionProb[1];
+      delete hmm1;
+    }
+    for(int nextState=0 ; nextState<numStates+numNewStates ; ++nextState)
+      transitionProb[state][nextState]=NEGATIVE_INFINITY;
+    for(int prevState=0 ; prevState<numStates ; ++prevState)
+      transitionProb[prevState][state]=NEGATIVE_INFINITY;
+  }
+  numStates+=numNewStates;
+}
 
 
 

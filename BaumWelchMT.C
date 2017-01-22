@@ -33,7 +33,8 @@ BaumWelchMT::BaumWelchMT(HMM &hmm,int numThreads,long maxIterations,
 			 bool useGlobalCov,bool useGlobalCor,
 			 bool useIdentityCov,bool constantMeans,
 			 const String &outfile,TieProfile *ties,
-			 bool updateDiscrete,bool backOff)
+			 bool updateDiscrete,bool backOff,
+			 bool randomizeWeights)
   : hmm(hmm), numThreads(numThreads), seqSets(numThreads),
     trainingSet(trainingSet),  maxIterations(maxIterations),
     hmmGraph(hmm), schema(hmm.getSchema()), maxSampleSize(maxSampleSize),
@@ -46,7 +47,8 @@ BaumWelchMT::BaumWelchMT(HMM &hmm,int numThreads,long maxIterations,
     useIdentityCov(useIdentityCov), constantMeans(constantMeans),
     outfile(outfile), numDiscrete(hmm.getSchema().getNumDiscrete()),
     tieProfile(ties), LLthreshold(LLthreshold), seqWeights(seqWeights),
-    wantUpdateDiscrete(updateDiscrete), wantBackOff(backOff)
+    wantUpdateDiscrete(updateDiscrete), wantBackOff(backOff),
+    randomizeWeights(randomizeWeights)
 {
   // Allocate arrays
   mun.resize(D,m); 
@@ -371,7 +373,7 @@ void BaumWelchMT::mainAlgorithm()
 
   // Initialize lambda
   cout<<"initializing mixture weights..."<<endl;
-  if(wantRandomize || initialMeans.size()>0)
+  if(randomizeWeights) // if(wantRandomize || initialMeans.size()>0))
     for(STATE q=1 ; q<Nq ; ++q) {
       GaussianMixture &mix=hmm.getEmissionDistr(q);
       Array1D<double> lambda(m);

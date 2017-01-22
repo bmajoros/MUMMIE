@@ -34,6 +34,7 @@ public:
   HMM(const HMM &);
   virtual ~HMM();
   const HMM &operator=(const HMM &);
+  void addStates(int numNewStates);
   Schema &getSchema() {return schema;}
   double getEmissionProb(int inState,const Emission &,
 			 bool omitContinuous=false) const;
@@ -74,7 +75,7 @@ public:
   void addDiscreteTrack(const String &name,const Alphabet &,int order);
   void dropContinuousTrack(const String &name);
   void dropDiscreteTrack(const String &name);
-  void addMixtureComponent();
+  void addMixtureComponent(); // retains parameters of existing components
   const NmerChain &getChain(int trackNum) {return chains[trackNum];}
   Set<int> &getForegroundStates();
   void changeStateOrder(STATE,int order); //all discrete tracks; destructive

@@ -72,7 +72,7 @@ Application::Application()
 int Application::go(int argc,char *argv[])
 {
   // Process command line
-  CommandLine cmd(argc,argv,"bB:c:C:dgIl:L:m:MN:n:rRs:t:uw:");
+  CommandLine cmd(argc,argv,"bB:c:C:dgIl:L:m:MN:n:rRs:t:uw:W");
   if(cmd.numArgs()!=5) 
     throw "\n\
 baum-welch [options] <initial.hmm> <dependency-graph.tgf> <training-dir> <#iterations> <out.hmm>\n\
@@ -95,6 +95,7 @@ baum-welch [options] <initial.hmm> <dependency-graph.tgf> <training-dir> <#itera
           -t file = tie parameters according to profile in file\n\
           -u = update the discrete emission chains during EM\n\
           -w file = use sequence weights from file\n\
+          -W = don't randomize mixture weights\n\
 ";
   String structureFile=cmd.arg(0);
   String graphFile=cmd.arg(1);
@@ -125,6 +126,7 @@ baum-welch [options] <initial.hmm> <dependency-graph.tgf> <training-dir> <#itera
   bool wantBackOff=!cmd.option('b');
   String weightsFile;
   if(cmd.option('w')) weightsFile=cmd.optParm('w');
+  bool randomizeWeights=!cmd.option('W');
 
   // Misc. initialization
   cout.precision(10);
@@ -196,7 +198,8 @@ baum-welch [options] <initial.hmm> <dependency-graph.tgf> <training-dir> <#itera
   BaumWelchMT bw(hmm,numThreads,maxIterations,LLthreshold,trainingSet,
 		 weights,means,bilmesFactor,graph,1000000,osLog,wantRandomize,
 		 diagonalOnly,useGlobalCov,useGlobalCor,useIdentityCov,
-		 constantMeans,outfile,ties,updateDiscrete,wantBackOff);
+		 constantMeans,outfile,ties,updateDiscrete,wantBackOff,
+		 randomizeWeights);
   cout<<"done"<<endl;
 
   // Save the results

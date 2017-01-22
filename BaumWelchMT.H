@@ -86,7 +86,8 @@ public:
 	      bool useGlobalCov=false,bool useGlobalCor=false,
 	      bool useIdentityCov=false,bool constantMeans=false,
 	      const String &outfile="",TieProfile* =NULL,
-	      bool updateDiscrete=false,bool backOff=true);
+	      bool updateDiscrete=false,bool backOff=true,
+	      bool randomizeWeights=true);
 private:
   const Array1D<float> &seqWeights;
   typedef pair<VertexId,VertexId> Edge;
@@ -108,7 +109,7 @@ private:
   Array2D<double> A; // expected transition counts
   SparseGraph *dependencyGraph;
   EdgeVector edges;
-  bool wantRandomize, diagonalOnly, wantBackOff;
+  bool wantRandomize, diagonalOnly, wantBackOff, randomizeWeights;
   bool useGlobalCov;
   bool useGlobalCor;
   bool useIdentityCov;
