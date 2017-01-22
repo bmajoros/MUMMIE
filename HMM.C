@@ -675,8 +675,18 @@ void HMM::addDiscreteTrack(const String &name,const Alphabet &alpha,int order)
 
 void HMM::addMixtureComponent()
 {
-  int n=emissionProb.size();
-  for(int i=1 ; i<n ; ++i) emissionProb[i].addComponent();
+  int numStates=emissionProb.size();
+  //for(int i=1 ; i<numStates ; ++i) emissionProb[i].addComponent();
+
+  HMMbuilder builder;
+  const int numComponents=numMixtureComponents();
+  HMM *hmm1=builder.randomHMM(2,0,1,schema,order,NULL,false);
+  for(int i=1 ; i<numStates ; ++i) {
+    GaussianMixture &mixture=emissionProb[i];
+    mixture.addComponent();
+    mixture.getDistr(numComponents)=hmm1->emissionProb[1].getDistr(0);
+  }
+  delete hmm1;
 }
 
 
