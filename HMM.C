@@ -13,6 +13,7 @@
 #include "BOOM/Constants.H"
 #include "BOOM/RouletteWheel.H"
 #include "BOOM/HigherOrderAlphabet.H"
+#include "BOOM/GSL/GaussianDistribution.H"
 #include "BOOM/Set.H"
 #include "HMMbuilder.H"
 using namespace std;
@@ -678,15 +679,30 @@ void HMM::addMixtureComponent()
   int numStates=emissionProb.size();
   //for(int i=1 ; i<numStates ; ++i) emissionProb[i].addComponent();
 
-  HMMbuilder builder;
   const int numComponents=numMixtureComponents();
-  HMM *hmm1=builder.randomHMM(2,0,1,schema,order,NULL,false);
-  for(int i=1 ; i<numStates ; ++i) {
-    GaussianMixture &mixture=emissionProb[i];
-    mixture.addComponent();
-    mixture.getDistr(numComponents)=hmm1->emissionProb[1].getDistr(0);
+  if(numComponents==0) { // Generate random cov matrix
+    HMMbuilder builder;
+    HMM *hmm1=builder.randomHMM(2,0,1,schema,order,NULL,false);
+    for(int i=1 ; i<numStates ; ++i) {
+      GaussianMixture &mixture=emissionProb[i];
+      mixture.addComponent();
+      mixture.getDistr(numComponents)=hmm1->emissionProb[1].getDistr(0);
+    }
+    delete hmm1;
   }
-  delete hmm1;
+  else { // Copy cov matrix from an existing component (safer)
+    GaussianDistribution gauss0(0.0,1.0);
+    const int numTracks=schema.getNumContinuous();
+    GSL::Vector randomMeans(numTracks);
+    for(int d=0 ; d<numTracks ; ++d) randomMeans[d]=gauss0.random();
+    for(int i=1 ; i<numStates ; ++i) {
+      GaussianMixture &mixture=emissionProb[i];
+      mixture.addComponent();
+      MultiGauss &gauss=mixture.getDistr(numComponents);
+      gauss=mixture.getDistr(numComponents-1);
+      gauss.getMeans()=randomMeans;
+    }
+  }
 }
 
 
