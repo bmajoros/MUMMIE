@@ -35,6 +35,7 @@ public:
   virtual ~HMM();
   const HMM &operator=(const HMM &);
   void addStates(int numNewStates);
+  void deleteState(int stateNum);
   Schema &getSchema() {return schema;}
   double getEmissionProb(int inState,const Emission &,
 			 bool omitContinuous=false) const;

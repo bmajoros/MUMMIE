@@ -52,6 +52,7 @@ class Application {
   void nmer(CommandLine &cmd,int &index);
   void ord(CommandLine &cmd,int &index);
   void states(CommandLine &cmd,int &index);
+  void dstate(CommandLine &cmd,int &index);
 public:
   Application();
   int go(int argc,char *argv[]);
@@ -96,6 +97,7 @@ const char *usage="\n\
 hmm-edit <in-out.hmm> <operations>\n\
   where <operations> are:  \n\
     STATES n : add n states to the model\n\
+    DSTATE v : delete state v\n\
     TRANS from to value : set transition probability to value\n\
     MIX state mixture_index value : set mixture weight to value\n\
     MEAN mixture_index track_index value : set mean to value\n\
@@ -143,6 +145,7 @@ int Application::go(int argc,char *argv[])
     else if(op=="NMER") nmer(cmd,i);
     else if(op=="ORD") ord(cmd,i);
     else if(op=="STATES") states(cmd,i);
+    else if(op=="DSTATE") dstate(cmd,i);
     else throw op+" : unrecognized command\n";
   }
   hmm->save(hmmFile);
@@ -403,6 +406,15 @@ void Application::states(CommandLine &cmd,int &index)
   Parm parm=nextParm(cmd,index);
   const int N=parm.str.asInt();
   hmm->addStates(N);
+}
+
+
+
+void Application::dstate(CommandLine &cmd,int &index)
+{
+  Parm parm=nextParm(cmd,index);
+  const int N=parm.str.asInt();
+  hmm->deleteState(N);
 }
 
 

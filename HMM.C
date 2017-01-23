@@ -828,4 +828,23 @@ void HMM::addStates(int numNewStates)
 
 
 
+void HMM::deleteState(int stateNum)
+{
+  orders.deleteRow(stateNum);
+  transitionProb.deleteRow(stateNum);
+  transitionProb.deleteColumn(stateNum);
+  emissionProb.cut(stateNum);
+  discreteEmitProb.deleteRow(stateNum);
+  --numStates;
+  Set<int> foreground;
+  for(Set<int>::iterator cur=foregroundStates.begin(), 
+	end=foregroundStates.end() ; cur!=end ; ++cur) {
+    int s=*cur;
+    if(s==stateNum) continue;
+    if(s>stateNum) --s;
+    foreground.insert(s);
+  }
+  foregroundStates=foreground;
+}
+
 
