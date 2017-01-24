@@ -1,0 +1,13 @@
+
+
+To compile MUMMIE:
+
+make all
+
+Please set environment variable "MUMMIE" to point to this directory.
+
+Please add "$MUMMIE/python" to your PYTHONPATH
+
+Please add "$MUMMIE/perl" to your PERLLIB
+
+
