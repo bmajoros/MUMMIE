@@ -423,10 +423,10 @@ Parm Application::nextParm(CommandLine &cmd,int &index)
 {
   if(cmd.numArgs()<=index) throw "missing arguments";
   String arg=cmd.arg(index++);
-  arg.toupper();
   arg.trimWhitespace();
   ParmType t;
-  if(arg=="ALL") t=PT_ALL;
+  String argUpper=arg; argUpper.toupper();
+  if(argUpper=="ALL") t=PT_ALL;
   else if(numeric.search(arg)) t=PT_VALUES;
   else t=PT_STRING;
   Parm parm(t);
