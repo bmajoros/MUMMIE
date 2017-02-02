@@ -39,10 +39,8 @@ for line in IN:
                 if(p==0): continue
                 setTrans(transitions,j,i,p)
 IN.close()
-print("xxx",transitions.keys())
 keys=list(transitions.keys())
 keys.sort(key=lambda x: int(x))
-print("keys",len(keys))
 for From in keys:
     column=transitions[From]
     keys2=list(column.keys())
