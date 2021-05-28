@@ -397,11 +397,7 @@ void BaumWelchMT::mainAlgorithm()
     first=next;
   }
 
-  //cout<<"saving initial hmm..."<<endl;
-  if(!outfile.isEmpty()) {
-    hmm.normalizeTransitions();
-    //hmm.save(outfile);
-  }
+  hmm.normalizeTransitions();
 
   //====================================================== EM EM EM EM
   //====================================================== EM EM EM EM

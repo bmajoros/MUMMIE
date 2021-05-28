@@ -852,6 +852,7 @@ $(OBJ)/parse.o:\
 		parse.C
 #---------------------------------------------------------
 parse: \
+		$(OBJ)/HMMbuilder.o \
 		$(OBJ)/ForwardAlgorithm.o \
 		$(OBJ)/BackwardAlgorithm.o \
 		$(OBJ)/parse.o \
@@ -866,6 +867,7 @@ parse: \
 		$(OBJ)/HMMGraph.o \
 		$(OBJ)/FastViterbi.o
 	$(CC) $(LDFLAGS) -o parse \
+		$(OBJ)/HMMbuilder.o \
 		$(OBJ)/ForwardAlgorithm.o \
 		$(OBJ)/BackwardAlgorithm.o \
 		$(OBJ)/parse.o \
